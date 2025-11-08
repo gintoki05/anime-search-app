@@ -105,7 +105,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 dark:bg-gray-950 overflow-hidden">
+    <div className="relative min-h-screen bg-background overflow-hidden">
       {/* Subtle Sakura Petals Background */}
       <AnimatedBackground />
 
