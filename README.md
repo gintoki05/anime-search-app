@@ -128,6 +128,45 @@ Implemented optional enhancements beyond core requirements:
 18. **Clear Error Surfaces** - Distinct error handling for search vs detail contexts
 19. **Back Navigation** - Componentized BackBar with history preservation
 
+### 🎨 Creative "WOW" Factor UI Enhancements
+
+20. **Sakura Petal Animation** - Subtle floating sakura petals (20 petals) that gently fall across the screen with rotation, creating authentic anime atmosphere without being distracting
+21. **Glassmorphism Search Bar** - Enhanced search bar with frosted glass effect, backdrop blur, and smooth hover shadow that elevates on interaction
+22. **3D Card Tilt Effect** - Anime cards respond to mouse movement with real-time 3D rotation (perspective transform), creating magnetic hover effect with depth perception
+23. **Parallax Scrolling** - Detail page images and content move at different speeds during scroll, creating depth illusion and premium feel
+24. **Stagger Grid Animation** - Search results animate in sequentially with 50ms delay between each card, creating cascading entrance effect
+25. **Shimmer Loading Effect** - Image placeholders use animated gradient shimmer (not static pulse) that moves across the placeholder
+26. **Gradient Score Badges** - Score badges with yellow-to-orange gradient backgrounds and enhanced shadow on hover
+27. **Info Reveal on Hover** - Cards show "Click to view details →" badge at bottom when hovered, replacing distracting play buttons
+28. **Gradient Text Effects** - Section titles use gradient text (background-clip: text) with soft color combinations (indigo→purple→pink)
+29. **Enhanced Borders** - Cards use colorful 2px borders (indigo/purple/pink/blue variants) with shadow glows matching the border color
+30. **Decorative Corner Accents** - Subtle gradient corner decorations in card content areas
+31. **Scale & Fade Transitions** - Page elements use scale-in and fade-up animations with opacity keyframes for smooth reveals
+32. **Hover Indicator Bar** - Bottom gradient bar (indigo→purple→pink) appears on card hover with smooth opacity transition
+33. **Modern Minimalist Background** - Clean gray-50/gray-950 background that puts focus on content while sakura petals add anime charm
+34. **Smooth Micro-interactions** - All interactive elements have refined 300ms transitions for professional feel
+
+### Animation Specifications
+
+- **Sakura Fall**: Gentle downward movement (0.2-0.7px/frame) with horizontal drift and rotation for natural petal motion
+- **Shimmer**: 2s infinite linear gradient animation moving 1000px across surface
+- **Fade In Up**: 0.6s ease-out with 30px vertical translate and opacity 0→1
+- **Scale In**: 0.5s ease-out with scale 0.9→1 and opacity 0→1
+- **3D Tilt**: Real-time perspective(1000px) transform with rotateX/Y based on mouse position
+- **Stagger Delay**: 50ms increment per grid item (index × 0.05s)
+- **Hover Transitions**: 300ms duration with ease timing for smooth, professional interactions
+
+### Color Palette Enhancements
+
+- **Primary Gradients**: Indigo 500/600 → Purple 500/600 → Pink 500/600
+- **Accent Gradients**: Yellow 500 → Orange 500 (score badges)
+- **Background**: Clean gray-50 (light) / gray-950 (dark) for modern minimalist look
+- **Sakura Petals**: Soft pink (rgba(255, 182, 193, 0.6)) with gentle fade
+- **Glass Effects**: rgba(255,255,255,0.1) with 10px blur + 180% saturation (light mode)
+- **Border Glows**: Box-shadow with color/20 opacity, subtle spread for depth
+
+All animations use CSS keyframes with smooth easing functions and are GPU-accelerated via transform/opacity properties for 60fps performance. Design philosophy: Modern, minimalist, anime-inspired with purposeful animations that enhance rather than distract.
+
 ## Error Handling
 
 - Network failures surfaced via Alert component

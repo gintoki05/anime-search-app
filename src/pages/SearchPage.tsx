@@ -13,6 +13,7 @@ import SearchBar from "@/components/SearchBar";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Pagination from "@/components/Pagination";
 import { LoadingAnimation } from "@/components/LoadingAnimation";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { ErrorAlert } from "@/components/search/ErrorAlert";
@@ -101,51 +102,57 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <SearchHeader />
-      <div className="mb-8">
-        <SearchBar value={inputValue} onChange={handleInputChange} />
-      </div>
+    <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+      {/* Subtle Sakura Petals Background */}
+      <AnimatedBackground />
 
-      {error && <ErrorAlert message={error} />}
-
-      {/* ✅ Tampilkan loading animation saat searching (PRIORITAS UTAMA) */}
-      {searchLoading && <LoadingAnimation message="Searching anime..." />}
-
-      {/* Jika tidak loading & tidak error & input kosong */}
-      {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
-
-      {/* Jika tidak loading & tidak error & input ada & hasil kosong */}
-      {!searchLoading &&
-        !error &&
-        inputValue.trim() &&
-        searchResults.length === 0 &&
-        searchQuery === inputValue && <NoResults />}
-
-      {/* Jika ada hasil */}
-      {searchResults.length > 0 && (
-        <div className="space-y-6">
-          <ResultsInfo pagination={pagination} searchQuery={searchQuery} />
-          <ResultsGrid items={searchResults} />
-          {searchLoading && searchResults.length > 0 && (
-            <div className="flex justify-center py-8">
-              <LoadingSpinner
-                message="Loading more results..."
-                className="py-4"
-              />
-            </div>
-          )}
-          {pagination.totalPages > 1 && (
-            <Pagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-              onPageChange={handlePageChange}
-            />
-          )}
+      <div className="container mx-auto px-4 py-8 max-w-7xl relative z-10">
+        <div className="animate-scale-in">
+          <SearchHeader />
         </div>
-      )}
+        <div className="mb-8">
+          <SearchBar value={inputValue} onChange={handleInputChange} />
+        </div>
+
+        {error && <ErrorAlert message={error} />}
+
+        {/* ✅ Tampilkan loading animation saat searching (PRIORITAS UTAMA) */}
+        {searchLoading && <LoadingAnimation message="Searching anime..." />}
+
+        {/* Jika tidak loading & tidak error & input kosong */}
+        {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
+
+        {/* Jika tidak loading & tidak error & input ada & hasil kosong */}
+        {!searchLoading &&
+          !error &&
+          inputValue.trim() &&
+          searchResults.length === 0 &&
+          searchQuery === inputValue && <NoResults />}
+
+        {/* Jika ada hasil */}
+        {searchResults.length > 0 && (
+          <div className="space-y-6">
+            <ResultsInfo pagination={pagination} searchQuery={searchQuery} />
+            <ResultsGrid items={searchResults} />
+            {searchLoading && searchResults.length > 0 && (
+              <div className="flex justify-center py-8">
+                <LoadingSpinner
+                  message="Loading more results..."
+                  className="py-4"
+                />
+              </div>
+            )}
+            {pagination.totalPages > 1 && (
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
-
 export default SearchPage;

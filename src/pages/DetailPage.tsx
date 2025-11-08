@@ -4,6 +4,7 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { fetchAnimeById, clearSelectedAnime } from "../store/animeSlice";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { BackBar } from "@/components/detail/BackBar";
 import { ErrorSection } from "@/components/detail/ErrorSection";
 import { NotFoundSection } from "@/components/detail/NotFoundSection";
@@ -26,8 +27,9 @@ const DetailPage = () => {
 
   if (detailLoading)
     return (
-      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors">
-        <div className="container mx-auto px-4 py-8">
+      <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+        <AnimatedBackground />
+        <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="flex items-center justify-center min-h-[50vh]">
             <LoadingSpinner message="Loading anime details..." />
           </div>
@@ -41,8 +43,9 @@ const DetailPage = () => {
   if (!selectedAnime) return <NotFoundSection onBack={() => navigate("/")} />;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+      <AnimatedBackground />
+      <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
         <BackBar onBack={() => navigate(-1)} />
         <AnimeLayout anime={selectedAnime} />
       </div>
