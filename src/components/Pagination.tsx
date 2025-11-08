@@ -18,25 +18,30 @@ const Pagination: React.FC<PaginationProps> = ({
     const range = [];
     const rangeWithDots = [];
 
+    // ✅ FIX: Mulai dari 1, bukan 2
     for (
-      let i = Math.max(2, currentPage - delta);
-      i <= Math.min(totalPages - 1, currentPage + delta);
+      let i = Math.max(1, currentPage - delta);
+      i <= Math.min(totalPages, currentPage + delta);
       i++
     ) {
       range.push(i);
     }
 
-    if (currentPage - delta > 2) {
-      rangeWithDots.push(1, "...");
-    } else {
+    // ✅ FIX: Jangan add 1 dua kali jika sudah ada di range
+    if (range[0] !== 1) {
       rangeWithDots.push(1);
+      if (range[0] > 2) {
+        rangeWithDots.push("...");
+      }
     }
 
     rangeWithDots.push(...range);
 
-    if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push("...", totalPages);
-    } else if (totalPages > 1) {
+    // ✅ FIX: Check apakah totalPages sudah ada di range
+    if (range[range.length - 1] !== totalPages) {
+      if (range[range.length - 1] < totalPages - 1) {
+        rangeWithDots.push("...");
+      }
       rangeWithDots.push(totalPages);
     }
 

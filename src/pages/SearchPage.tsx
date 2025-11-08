@@ -134,7 +134,7 @@ const SearchPage = () => {
               />
             </div>
           )}
-          {pagination.totalPages > 1 && !searchLoading && (
+          {pagination.totalPages > 1 && (
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
