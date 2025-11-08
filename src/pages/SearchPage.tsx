@@ -69,8 +69,9 @@ const SearchPage = () => {
   }, [debouncedSearchTerm]);
 
   // ✅ EFFECT 2: Handle pagination ONLY (triggered by button/URL)
+  // This runs when currentPage changes via pagination buttons or URL params
   useEffect(() => {
-    if (!searchQuery.trim() || currentPage === 1) return;
+    if (!searchQuery.trim()) return;
 
     cancelRef.current?.abort();
     cancelRef.current = new AbortController();

@@ -21,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
         placeholder="Search anime..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-10 pr-10"
+        className="pl-10 pr-10 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-950"
       />
       {value && (
         <Button
