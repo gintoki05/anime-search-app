@@ -1,6 +1,7 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface SearchBarProps {
   value: string;
@@ -8,16 +9,32 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+  const handleClear = () => {
+    onChange("");
+  };
+
   return (
     <div className="relative w-full max-w-2xl mx-auto">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
       <Input
         type="text"
-        placeholder="Search for anime..."
+        placeholder="Search anime..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="pl-10 h-12 text-base bg-white/80 backdrop-blur-sm border-2 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+        className="pl-10 pr-10"
       />
+      {value && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={handleClear}
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+          aria-label="Clear search"
+        >
+          <X className="w-4 h-4" />
+        </Button>
+      )}
     </div>
   );
 };

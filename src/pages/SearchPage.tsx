@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks/useAppDispatch";
@@ -31,7 +32,7 @@ const SearchPage = () => {
 
   const [inputValue, setInputValue] = useState(queryParam);
   const [currentPage, setCurrentPage] = useState(pageParam);
-  const debouncedSearchTerm = useDebounce(inputValue, 250);
+  const debouncedSearchTerm = useDebounce(inputValue, 500);
   const cancelRef = useRef<AbortController | null>(null);
 
   // ✅ EFFECT 1: Handle input changes & debounced search
@@ -62,8 +63,10 @@ const SearchPage = () => {
       })
     );
 
-    return () => cancelRef.current?.abort();
-  }, [debouncedSearchTerm, dispatch, setSearchParams]);
+    return () => {
+      cancelRef.current?.abort();
+    };
+  }, [debouncedSearchTerm]);
 
   // ✅ EFFECT 2: Handle pagination ONLY (triggered by button/URL)
   useEffect(() => {
@@ -83,7 +86,7 @@ const SearchPage = () => {
     );
 
     return () => cancelRef.current?.abort();
-  }, [currentPage, searchQuery, dispatch, setSearchParams]);
+  }, [currentPage, searchQuery]);
 
   const handleInputChange = (val: string) => {
     setInputValue(val);
@@ -106,9 +109,7 @@ const SearchPage = () => {
       {error && <ErrorAlert message={error} />}
 
       {/* ✅ Tampilkan loading animation saat searching (PRIORITAS UTAMA) */}
-      {searchLoading && inputValue.trim() && (
-        <LoadingAnimation message="Searching anime..." />
-      )}
+      {searchLoading && <LoadingAnimation message="Searching anime..." />}
 
       {/* Jika tidak loading & tidak error & input kosong */}
       {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
@@ -117,7 +118,8 @@ const SearchPage = () => {
       {!searchLoading &&
         !error &&
         inputValue.trim() &&
-        searchResults.length === 0 && <NoResults />}
+        searchResults.length === 0 &&
+        searchQuery === inputValue && <NoResults />}
 
       {/* Jika ada hasil */}
       {searchResults.length > 0 && (
