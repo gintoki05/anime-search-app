@@ -13,7 +13,9 @@ const DetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { selectedAnime, loading, error } = useAppSelector((s) => s.anime);
+  const { selectedAnime, detailLoading, error } = useAppSelector(
+    (s) => s.anime
+  );
 
   useEffect(() => {
     if (id) dispatch(fetchAnimeById(Number(id)));
@@ -22,11 +24,13 @@ const DetailPage = () => {
     };
   }, [id, dispatch]);
 
-  if (loading)
+  if (detailLoading)
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <LoadingSpinner />
+      <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <LoadingSpinner message="Loading anime details..." />
+          </div>
         </div>
       </div>
     );
@@ -37,7 +41,7 @@ const DetailPage = () => {
   if (!selectedAnime) return <NotFoundSection onBack={() => navigate("/")} />;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <BackBar onBack={() => navigate(-1)} />
         <AnimeLayout anime={selectedAnime} />

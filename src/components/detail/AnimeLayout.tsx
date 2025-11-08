@@ -11,7 +11,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-1">
         <div className="sticky top-6">
-          <Card className="overflow-hidden bg-white/90 backdrop-blur-sm">
+          <Card className="overflow-hidden bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
             <div className="aspect-3/4 relative">
               <img
                 src={
@@ -34,9 +34,11 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
       </div>
 
       <div className="lg:col-span-2 space-y-6">
-        <Card className="bg-white/90 backdrop-blur-sm">
+        <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold">{displayTitle}</CardTitle>
+            <CardTitle className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {displayTitle}
+            </CardTitle>
             {anime.title_japanese && anime.title_japanese !== displayTitle && (
               <p className="text-lg text-muted-foreground italic">
                 {anime.title_japanese}
@@ -64,7 +66,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
         </Card>
 
         {anime.genres?.length > 0 && (
-          <Card className="bg-white/90 backdrop-blur-sm">
+          <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="text-xl">Genres</CardTitle>
             </CardHeader>
@@ -81,7 +83,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
         )}
 
         {anime.studios?.length > 0 && (
-          <Card className="bg-white/90 backdrop-blur-sm">
+          <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 <Building className="w-5 h-5" />
@@ -101,7 +103,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
         )}
 
         {anime.synopsis && (
-          <Card className="bg-white/90 backdrop-blur-sm">
+          <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="text-xl">Synopsis</CardTitle>
             </CardHeader>

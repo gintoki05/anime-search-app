@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Star, Tv } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,6 +10,8 @@ interface AnimeCardProps {
 }
 
 const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const getDisplayTitle = (anime: Anime) => {
     return anime.title_english || anime.title || anime.title_japanese;
   };
@@ -20,14 +22,20 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
 
   return (
     <Link to={`/anime/${anime.mal_id}`} className="group">
-      <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white/90 backdrop-blur-sm border-border/50">
-        <div className="relative aspect-3/4 overflow-hidden">
+      <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-border/50">
+        <div className="relative aspect-3/4 overflow-hidden bg-muted">
           <img
             src={anime.images.jpg.image_url}
             alt={getDisplayTitle(anime)}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
             loading="lazy"
+            onLoad={() => setImageLoaded(true)}
           />
+          {!imageLoaded && (
+            <div className="absolute inset-0 animate-pulse bg-linear-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600" />
+          )}
           <div className="absolute top-2 right-2">
             <Badge
               variant="secondary"

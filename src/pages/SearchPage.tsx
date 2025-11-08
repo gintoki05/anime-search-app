@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useDebounce } from "../hooks/useDebounce";
@@ -20,18 +21,42 @@ import { ResultsInfo } from "@/components/search/ResultsInfo";
 import { ResultsGrid } from "@/components/search/ResultsGrid";
 
 const SearchPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const { searchResults, loading, error, pagination, searchQuery } =
+  const { searchResults, searchLoading, error, pagination, searchQuery } =
     useAppSelector((s) => s.anime);
-  const [inputValue, setInputValue] = useState("");
+
+  const queryParam = searchParams.get("q") || "";
+
+  const [inputValue, setInputValue] = useState(queryParam);
   const debouncedSearchTerm = useDebounce(inputValue, 250);
   const cancelRef = useRef<AbortController | null>(null);
+
+  // We already seed initial inputValue from queryParam in useState.
+  // Removing the syncing effect avoids the bug where clearing the input repopulates the last query
+  // because the old URL param lingers until debounce clears it.
+
+  // Handle user typing (including immediate clear) separate from debounced search effect.
+  const handleInputChange = (val: string) => {
+    setInputValue(val);
+    if (val === "") {
+      // Abort any in‑flight request and clear state immediately (don't wait for debounce)
+      cancelRef.current?.abort();
+      dispatch(clearSearchResults());
+      dispatch(setSearchQuery(""));
+      setSearchParams({});
+    }
+  };
 
   useEffect(() => {
     if (debouncedSearchTerm.trim()) {
       cancelRef.current?.abort();
       cancelRef.current = new AbortController();
       dispatch(setSearchQuery(debouncedSearchTerm));
+
+      // Update URL params
+      setSearchParams({ q: debouncedSearchTerm, page: "1" });
+
       dispatch(
         searchAnime({
           query: debouncedSearchTerm,
@@ -41,15 +66,20 @@ const SearchPage = () => {
       );
     } else {
       dispatch(clearSearchResults());
+      setSearchParams({});
     }
     return () => cancelRef.current?.abort();
-  }, [debouncedSearchTerm, dispatch]);
+  }, [debouncedSearchTerm, dispatch, setSearchParams]);
 
   const handlePageChange = (page: number) => {
     if (!searchQuery.trim()) return;
     const controller = new AbortController();
     cancelRef.current?.abort();
     cancelRef.current = controller;
+
+    // Update URL params with new page
+    setSearchParams({ q: searchQuery, page: page.toString() });
+
     dispatch(
       searchAnime({ query: searchQuery, page, signal: controller.signal })
     );
@@ -59,16 +89,16 @@ const SearchPage = () => {
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <SearchHeader />
       <div className="mb-8">
-        <SearchBar value={inputValue} onChange={setInputValue} />
+        <SearchBar value={inputValue} onChange={handleInputChange} />
       </div>
 
       {error && <ErrorAlert message={error} />}
 
-      {loading && !searchResults.length && <LoadingSkeleton />}
+      {searchLoading && !searchResults.length && <LoadingSkeleton />}
 
-      {!loading && !error && !inputValue.trim() && <EmptyState />}
+      {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
 
-      {!loading &&
+      {!searchLoading &&
         !error &&
         inputValue.trim() &&
         searchResults.length === 0 && <NoResults />}
@@ -77,12 +107,15 @@ const SearchPage = () => {
         <div className="space-y-6">
           <ResultsInfo pagination={pagination} searchQuery={searchQuery} />
           <ResultsGrid items={searchResults} />
-          {loading && searchResults.length > 0 && (
+          {searchLoading && searchResults.length > 0 && (
             <div className="flex justify-center py-8">
-              <LoadingSpinner />
+              <LoadingSpinner
+                message="Loading more results..."
+                className="py-4"
+              />
             </div>
           )}
-          {pagination.totalPages > 1 && !loading && (
+          {pagination.totalPages > 1 && !searchLoading && (
             <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}

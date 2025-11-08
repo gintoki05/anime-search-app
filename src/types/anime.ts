@@ -43,7 +43,10 @@ export interface AnimeSearchResponse {
 export interface AnimeState {
   searchResults: Anime[];
   selectedAnime: Anime | null;
-  loading: boolean;
+  /** Loading flag for search requests */
+  searchLoading: boolean;
+  /** Loading flag for detail fetch requests */
+  detailLoading: boolean;
   error: string | null;
   pagination: {
     currentPage: number;

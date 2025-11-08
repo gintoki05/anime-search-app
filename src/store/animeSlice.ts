@@ -9,7 +9,8 @@ import { animeApi } from "../services/animeApi";
 const initialState: AnimeState = {
   searchResults: [],
   selectedAnime: null,
-  loading: false,
+  searchLoading: false,
+  detailLoading: false,
   error: null,
   pagination: {
     currentPage: 1,
@@ -54,19 +55,22 @@ const animeSlice = createSlice({
     clearSearchResults: (state) => {
       state.searchResults = [];
       state.pagination = initialState.pagination;
+      state.searchQuery = "";
+      state.searchLoading = false; // ensure spinner stops
     },
     clearSelectedAnime: (state) => {
       state.selectedAnime = null;
+      state.detailLoading = false;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(searchAnime.pending, (state) => {
-        state.loading = true;
+        state.searchLoading = true;
         state.error = null;
       })
       .addCase(searchAnime.fulfilled, (state, action) => {
-        state.loading = false;
+        state.searchLoading = false;
         state.searchResults = action.payload.data;
         state.pagination = {
           currentPage: action.payload.pagination.current_page,
@@ -76,7 +80,7 @@ const animeSlice = createSlice({
         };
       })
       .addCase(searchAnime.rejected, (state, action) => {
-        state.loading = false;
+        state.searchLoading = false;
         // Ignore cancellation errors to avoid noisy UI states during fast typing
         const msg = action.error.message || "Failed to search anime";
         if (
@@ -89,15 +93,15 @@ const animeSlice = createSlice({
         }
       })
       .addCase(fetchAnimeById.pending, (state) => {
-        state.loading = true;
+        state.detailLoading = true;
         state.error = null;
       })
       .addCase(fetchAnimeById.fulfilled, (state, action) => {
-        state.loading = false;
+        state.detailLoading = false;
         state.selectedAnime = action.payload;
       })
       .addCase(fetchAnimeById.rejected, (state, action) => {
-        state.loading = false;
+        state.detailLoading = false;
         state.error = action.error.message || "Failed to fetch anime details";
       });
   },
