@@ -27,62 +27,73 @@ const SearchPage = () => {
     useAppSelector((s) => s.anime);
 
   const queryParam = searchParams.get("q") || "";
+  const pageParam = parseInt(searchParams.get("page") || "1", 10);
 
   const [inputValue, setInputValue] = useState(queryParam);
+  const [currentPage, setCurrentPage] = useState(pageParam);
   const debouncedSearchTerm = useDebounce(inputValue, 250);
   const cancelRef = useRef<AbortController | null>(null);
 
-  // We already seed initial inputValue from queryParam in useState.
-  // Removing the syncing effect avoids the bug where clearing the input repopulates the last query
-  // because the old URL param lingers until debounce clears it.
-
-  // Handle user typing (including immediate clear) separate from debounced search effect.
-  const handleInputChange = (val: string) => {
-    setInputValue(val);
-    if (val === "") {
-      // Abort any in‑flight request and clear state immediately (don't wait for debounce)
+  // ✅ EFFECT 1: Handle input changes & debounced search
+  useEffect(() => {
+    // Jika input kosong, clear semua
+    if (!debouncedSearchTerm.trim()) {
       cancelRef.current?.abort();
       dispatch(clearSearchResults());
       dispatch(setSearchQuery(""));
       setSearchParams({});
+      setCurrentPage(1);
+      return;
     }
-  };
 
-  useEffect(() => {
-    if (debouncedSearchTerm.trim()) {
-      cancelRef.current?.abort();
-      cancelRef.current = new AbortController();
-      dispatch(setSearchQuery(debouncedSearchTerm));
+    // User typed something, trigger search
+    cancelRef.current?.abort();
+    cancelRef.current = new AbortController();
 
-      // Update URL params
-      setSearchParams({ q: debouncedSearchTerm, page: "1" });
+    dispatch(setSearchQuery(debouncedSearchTerm));
+    setSearchParams({ q: debouncedSearchTerm, page: "1" });
+    setCurrentPage(1);
 
-      dispatch(
-        searchAnime({
-          query: debouncedSearchTerm,
-          page: 1,
-          signal: cancelRef.current.signal,
-        })
-      );
-    } else {
-      dispatch(clearSearchResults());
-      setSearchParams({});
-    }
+    dispatch(
+      searchAnime({
+        query: debouncedSearchTerm,
+        page: 1,
+        signal: cancelRef.current.signal,
+      })
+    );
+
     return () => cancelRef.current?.abort();
   }, [debouncedSearchTerm, dispatch, setSearchParams]);
 
-  const handlePageChange = (page: number) => {
-    if (!searchQuery.trim()) return;
-    const controller = new AbortController();
-    cancelRef.current?.abort();
-    cancelRef.current = controller;
+  // ✅ EFFECT 2: Handle pagination ONLY (triggered by button/URL)
+  useEffect(() => {
+    if (!searchQuery.trim() || currentPage === 1) return;
 
-    // Update URL params with new page
-    setSearchParams({ q: searchQuery, page: page.toString() });
+    cancelRef.current?.abort();
+    cancelRef.current = new AbortController();
+
+    setSearchParams({ q: searchQuery, page: currentPage.toString() });
 
     dispatch(
-      searchAnime({ query: searchQuery, page, signal: controller.signal })
+      searchAnime({
+        query: searchQuery,
+        page: currentPage,
+        signal: cancelRef.current.signal,
+      })
     );
+
+    return () => cancelRef.current?.abort();
+  }, [currentPage, searchQuery, dispatch, setSearchParams]);
+
+  const handleInputChange = (val: string) => {
+    setInputValue(val);
+    setCurrentPage(1);
+    cancelRef.current?.abort();
+  };
+
+  const handlePageChange = (page: number) => {
+    if (!searchQuery.trim()) return;
+    setCurrentPage(page);
   };
 
   return (
