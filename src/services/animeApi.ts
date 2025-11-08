@@ -44,6 +44,8 @@ export const animeApi = {
     // Check cache first
     const cached = searchCache.getSearch(query, page);
     if (cached) {
+      // Add small delay untuk menunjukkan loading state
+      await new Promise((resolve) => setTimeout(resolve, 300));
       return cached;
     }
 
@@ -70,6 +72,8 @@ export const animeApi = {
     // Check cache first
     const cached = searchCache.getDetail(id);
     if (cached) {
+      // Add small delay untuk menunjukkan loading state
+      await new Promise((resolve) => setTimeout(resolve, 300));
       return { data: cached };
     }
 

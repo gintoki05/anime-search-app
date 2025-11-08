@@ -9,9 +9,9 @@ import {
   clearSearchResults,
 } from "../store/animeSlice";
 import SearchBar from "@/components/SearchBar";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Pagination from "@/components/Pagination";
+import { LoadingAnimation } from "@/components/LoadingAnimation";
 
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { ErrorAlert } from "@/components/search/ErrorAlert";
@@ -105,15 +105,21 @@ const SearchPage = () => {
 
       {error && <ErrorAlert message={error} />}
 
-      {searchLoading && !searchResults.length && <LoadingSkeleton />}
+      {/* ✅ Tampilkan loading animation saat searching (PRIORITAS UTAMA) */}
+      {searchLoading && inputValue.trim() && (
+        <LoadingAnimation message="Searching anime..." />
+      )}
 
+      {/* Jika tidak loading & tidak error & input kosong */}
       {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
 
+      {/* Jika tidak loading & tidak error & input ada & hasil kosong */}
       {!searchLoading &&
         !error &&
         inputValue.trim() &&
         searchResults.length === 0 && <NoResults />}
 
+      {/* Jika ada hasil */}
       {searchResults.length > 0 && (
         <div className="space-y-6">
           <ResultsInfo pagination={pagination} searchQuery={searchQuery} />
