@@ -75,11 +75,11 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
             {/* Decorative Background */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
 
-            <CardTitle className="text-3xl font-bold bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent relative z-10">
+            <CardTitle className="text-4xl md:text-5xl font-heading font-bold bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent relative z-10 tracking-tight">
               {displayTitle}
             </CardTitle>
             {anime.title_japanese && anime.title_japanese !== displayTitle && (
-              <p className="text-lg text-muted-foreground italic relative z-10">
+              <p className="text-lg md:text-xl text-muted-foreground italic relative z-10 mt-2 font-display">
                 {anime.title_japanese}
               </p>
             )}
@@ -92,13 +92,13 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
               <MetaItem icon={<Clock className="w-3 h-3" />} label="Status">
                 <Badge
                   variant="outline"
-                  className="bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-400"
+                  className="bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-400 font-semibold"
                 >
                   {anime.status}
                 </Badge>
               </MetaItem>
               <MetaItem icon={<Calendar className="w-3 h-3" />} label="Aired">
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-bold font-display">
                   {anime.aired?.string || "Unknown"}
                 </span>
               </MetaItem>
@@ -115,7 +115,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
             style={{ animationDelay: "0.1s" }}
           >
             <CardHeader>
-              <CardTitle className="text-xl bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+              <CardTitle className="text-2xl font-heading bg-linear-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                 Genres
               </CardTitle>
             </CardHeader>
@@ -137,7 +137,7 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
             style={{ animationDelay: "0.2s" }}
           >
             <CardHeader>
-              <CardTitle className="text-xl flex items-center gap-2 bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <CardTitle className="text-2xl font-heading flex items-center gap-2 bg-linear-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 <Building className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 Studios
               </CardTitle>
@@ -160,12 +160,12 @@ export const AnimeLayout = ({ anime }: { anime: Anime }) => {
             style={{ animationDelay: "0.3s" }}
           >
             <CardHeader>
-              <CardTitle className="text-xl bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <CardTitle className="text-2xl font-heading bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Synopsis
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground leading-relaxed text-base">
+              <p className="text-muted-foreground leading-relaxed text-base font-display">
                 {anime.synopsis}
               </p>
             </CardContent>

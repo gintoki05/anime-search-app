@@ -116,6 +116,17 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Inter", "Poppins", -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+  }
+
+  /* Custom Font Classes */
+  .font-heading {
+    font-family: "Righteous", "Poppins", cursive;
+  }
+
+  .font-display {
+    font-family: "Poppins", sans-serif;
   }
 }
 

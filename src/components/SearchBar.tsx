@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
           placeholder="Search for your favorite anime..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="pl-12 pr-12 h-14 text-lg bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+          className="pl-12 pr-12 h-14 text-lg font-display bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 placeholder:font-display"
         />
 
         {/* Clear Button */}

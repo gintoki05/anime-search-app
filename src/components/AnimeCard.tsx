@@ -119,26 +119,26 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           {/* Decorative Corner */}
           <div className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-indigo-500/10 to-purple-500/10 rounded-bl-full" />
 
-          <h3 className="font-bold text-lg line-clamp-2 mb-3 text-foreground relative z-10 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+          <h3 className="font-display font-bold text-lg line-clamp-2 mb-3 text-foreground relative z-10 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
             {getDisplayTitle(anime)}
           </h3>
 
           <div className="flex items-center justify-between mb-3 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1 rounded-full">
               <Tv className="w-4 h-4 text-indigo-500" />
-              <span className="font-medium">
+              <span className="font-semibold">
                 {anime.episodes ? `${anime.episodes} eps` : "TBA"}
               </span>
             </div>
             <Badge
               variant="outline"
-              className="text-xs font-semibold bg-linear-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 text-green-700 dark:text-green-400"
+              className="text-xs font-bold bg-linear-to-r from-green-500/10 to-emerald-500/10 border-green-500/30 text-green-700 dark:text-green-400"
             >
               {anime.status}
             </Badge>
           </div>
 
-          <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed relative z-10">
+          <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed relative z-10 font-display">
             {anime.synopsis
               ? anime.synopsis.length > 100
                 ? `${anime.synopsis.substring(0, 100)}...`

@@ -27,7 +27,7 @@ const DetailPage = () => {
 
   if (detailLoading)
     return (
-      <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+      <div className="relative min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 dark:bg-gray-950 overflow-hidden">
         <AnimatedBackground />
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="flex items-center justify-center min-h-[50vh]">
@@ -43,7 +43,7 @@ const DetailPage = () => {
   if (!selectedAnime) return <NotFoundSection onBack={() => navigate("/")} />;
 
   return (
-    <div className="relative min-h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
+    <div className="relative min-h-screen bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 dark:bg-gray-950 overflow-hidden">
       <AnimatedBackground />
       <div className="container mx-auto px-4 py-8 max-w-6xl relative z-10">
         <BackBar onBack={() => navigate(-1)} />
