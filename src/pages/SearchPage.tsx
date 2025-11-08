@@ -48,34 +48,35 @@ const SearchPage = () => {
       return;
     }
 
-    // User typed something, trigger search
-    cancelRef.current?.abort();
-    cancelRef.current = new AbortController();
+    // Create NEW AbortController untuk request ini
+    const controller = new AbortController();
+    cancelRef.current = controller;
 
     dispatch(setSearchQuery(debouncedSearchTerm));
     setSearchParams({ q: debouncedSearchTerm, page: "1" });
     setCurrentPage(1);
 
+    // Dispatch dengan signal baru (jangan abort dulu!)
     dispatch(
       searchAnime({
         query: debouncedSearchTerm,
         page: 1,
-        signal: cancelRef.current.signal,
+        signal: controller.signal,
       })
     );
 
     return () => {
-      cancelRef.current?.abort();
+      controller.abort(); // ← Cleanup saat effect di-run ulang
     };
   }, [debouncedSearchTerm]);
 
-  // ✅ EFFECT 2: Handle pagination ONLY (triggered by button/URL)
-  // This runs when currentPage changes via pagination buttons or URL params
+  // ✅ EFFECT 2: Handle pagination ONLY
   useEffect(() => {
     if (!searchQuery.trim()) return;
 
-    cancelRef.current?.abort();
-    cancelRef.current = new AbortController();
+    // Create NEW AbortController
+    const controller = new AbortController();
+    cancelRef.current = controller;
 
     setSearchParams({ q: searchQuery, page: currentPage.toString() });
 
@@ -83,11 +84,13 @@ const SearchPage = () => {
       searchAnime({
         query: searchQuery,
         page: currentPage,
-        signal: cancelRef.current.signal,
+        signal: controller.signal,
       })
     );
 
-    return () => cancelRef.current?.abort();
+    return () => {
+      controller.abort(); // ← Cleanup saat effect di-run ulang
+    };
   }, [currentPage, searchQuery]);
 
   const handleInputChange = (val: string) => {
@@ -116,21 +119,22 @@ const SearchPage = () => {
 
         {error && <ErrorAlert message={error} />}
 
-        {/* ✅ Tampilkan loading animation saat searching (PRIORITAS UTAMA) */}
+        {/* ✅ PRIORITAS 1: Loading animation (tampil PERTAMA saat searching) */}
         {searchLoading && <LoadingAnimation message="Searching anime..." />}
 
-        {/* Jika tidak loading & tidak error & input kosong */}
+        {/* PRIORITAS 2: Empty state (jika input kosong & tidak sedang loading) */}
         {!searchLoading && !error && !inputValue.trim() && <EmptyState />}
 
-        {/* Jika tidak loading & tidak error & input ada & hasil kosong */}
+        {/* PRIORITAS 3: No results (jika search selesai & hasil kosong) */}
         {!searchLoading &&
           !error &&
           inputValue.trim() &&
-          searchResults.length === 0 &&
-          searchQuery === inputValue && <NoResults />}
+          searchQuery === inputValue && // ✅ Pastikan selaras
+          searchQuery.trim() && // ✅ Pastikan ada
+          searchResults.length === 0 && <NoResults />}
 
-        {/* Jika ada hasil */}
-        {searchResults.length > 0 && (
+        {/* PRIORITAS 4: Results grid (jika ada hasil) */}
+        {!searchLoading && searchResults.length > 0 && (
           <div className="space-y-6">
             <ResultsInfo pagination={pagination} searchQuery={searchQuery} />
             <ResultsGrid items={searchResults} />
